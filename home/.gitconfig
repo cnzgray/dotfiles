@@ -1,0 +1,54 @@
+[core]
+	excludesfile = ~/.gitignore
+	autocrlf = input
+
+[user]
+	name = zgray
+	email = cnzgray@qq.com
+
+[commit]
+	template = "$HOME/.dotfiles/git-extras/git-commit-template.txt"
+	cleanup = strip
+
+[alias]
+  discard = reset --hard HEAD
+  ci = commit
+  ch = checkout
+  d = diff
+
+  graph = log --graph
+  last = log -n 10
+  whois = "!sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -"
+  rmtag = "!sh -c 'git tag -d $1; git push origin :refs/tags/$1'"
+
+  release   = !sh "$HOME/.dotfiles/git-extras/git-release.sh"
+  setup     = !zsh "$HOME/.dotfiles/git-extras/git-setup.sh"
+  summary   = !zsh "$HOME/.dotfiles/git-extras/git-summary.sh"
+
+  pr = "!f() { git fetch -fu ${2:-origin} refs/pull/$1/head:pr/$1; } ; f"
+
+  ghfork = !sh "$HOME/.dotfiles/git-extras/git-ghpull.sh"
+  cleanup = !ruby "$HOME/.dotfiles/git-extras/git-cleanup.rb"
+
+[push]
+  default = simple
+
+[color]
+  ui = true
+
+[format]
+  pretty = %Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset
+  graph = true
+[advice]
+  statusHints = false
+[log]
+  abbrevCommit = true
+[mergetool]
+	keepBackup = false
+[pull]
+	rebase = true
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
