@@ -71,7 +71,7 @@ plugins=(
     zsh-syntax-highlighting
     zsh-autosuggestions
     zsh-completions
-    nvm
+    zsh-nvm
     yarn
 )
 autoload -U compinit && compinit # 配合zsh-completions插件
