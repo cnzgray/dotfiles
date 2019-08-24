@@ -13,8 +13,8 @@ echo " ********************************************************"
 echo " ************ INFO: install dotfiles  *******************"
 echo " ********************************************************"
 dir="$HOME/.dotfiles"
-mkdir -p $dir
 if [ ! -d "$dir" ]; then
+    mkdir -p $dir
     git clone --recursive https://github.com/cnzgray/dotfiles.git $dir
 fi
 
