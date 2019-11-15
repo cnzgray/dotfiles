@@ -12,3 +12,11 @@ ln -s $HOME/Dropbox/dotfiles $HOME/.dotfiles
 cd $HOME/.dotfiles && source etc/symlink-dotfiles.sh
 ```
 
+# Develop
+
+```
+docker build . -t zgray/ubuntu-zsh
+docker run --rm -it -v $PWD:/root/.dotfiles zgray/ubuntu-zsh zsh
+$HOME/.dotfiles/install.sh
+```
+
