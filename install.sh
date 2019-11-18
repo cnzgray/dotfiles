@@ -10,7 +10,7 @@ if [ ! -d "$dir" ]; then
 fi
 
 echo "install antigen..."
-curl -L git.io/antigen > antigen.zsh
+curl -L git.io/antigen > "$dir/antigen.zsh"
 
 sh etc/symlink-dotfiles.sh
 
