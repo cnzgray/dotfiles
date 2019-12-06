@@ -8,6 +8,7 @@ source $HOME/.dotfiles/antigen.zsh
 antigen use oh-my-zsh
 # Bundles from the default repo (robbyrussell's oh-my-zsh).
 antigen bundle git
+antigen bundle tmux
 antigen bundle docker
 antigen bundle docker-machine
 antigen bundle docker-compose
