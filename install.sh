@@ -9,8 +9,8 @@ if [ ! -d "$dir" ]; then
     git clone --recursive https://github.com/cnzgray/dotfiles.git $dir
 fi
 
-echo "install antigen..."
-curl -L git.io/antigen > "$dir/antigen.zsh"
+#echo "install antigen..."
+#curl -L git.io/antigen > "$dir/antigen.zsh"
 
 cd "$dir"
 
