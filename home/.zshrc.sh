@@ -23,11 +23,25 @@ antigen bundle zsh-users/zsh-completions
 antigen bundle lukechilds/zsh-nvm
 
 # Load the theme.
-antigen theme robbyrussell
+# antigen theme robbyrussell
 # antigen theme agnoster
+# 使用dracula主题
+antigen theme dracula/zsh
 
 # Tell Antigen that you're done.
 antigen apply
+
+# 修复dracula主题导致ohmyzsh的按键绑定配置失效的问题
+if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
+  function zle-line-init() {
+    echoti smkx
+  }
+  function zle-line-finish() {
+    echoti rmkx
+  }
+  zle -N zle-line-init
+  zle -N zle-line-finish
+fi
 
 #########################
 # Alias Config
