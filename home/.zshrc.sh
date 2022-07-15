@@ -1,63 +1,98 @@
+# 初始化zinit
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}}/.zinit/zinit.git"
+if [[ ! -f "${ZINIT_HOME}/zinit.zsh" ]]; then
+  git clone https://github.com/zdharma-continuum/zinit.git "${ZINIT_HOME}"
+fi
+source "${ZINIT_HOME}/zinit.zsh"
+
 DEFAULT_USER=$(whoami)
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
-export PATH="/usr/local/sbin:$PATH"
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH"
 
-ANTIGEN_PATH=~/.dotfiles
-source $ANTIGEN_PATH/antigen/antigen.zsh
-# Load the oh-my-zsh's library.
-antigen use oh-my-zsh
-# Bundles from the default repo (robbyrussell's oh-my-zsh).
-antigen bundle git
-antigen bundle tmux
-antigen bundle docker
-antigen bundle docker-machine
-antigen bundle docker-compose
-antigen bundle command-not-found
+# omz libs
+zinit snippet OMZL::clipboard.zsh
+zinit snippet OMZL::completion.zsh
+zinit snippet OMZL::directories.zsh
+zinit snippet OMZL::history.zsh
+zinit snippet OMZL::git.zsh
+zinit snippet OMZL::key-bindings.zsh
+zinit snippet OMZL::termsupport.zsh
+zinit snippet OMZL::theme-and-appearance.zsh
 
-antigen bundle zsh-users/zsh-syntax-highlighting
-antigen bundle zsh-users/zsh-autosuggestions
-antigen bundle zsh-users/zsh-completions
+# omz 主题
+# zinit snippet OMZT::robbyrussell
+# zinit snippet OMZT::agnoster
+# dracula主题
+zinit light dracula/zsh
+# zinit for depth=1 light-mode romkatv/powerlevel10k
 
-# NVM_LAZY_LOAD=true
-antigen bundle lukechilds/zsh-nvm
+# omz git plugin
+zinit snippet OMZP::git
 
-# Load the theme.
-# antigen theme robbyrussell
-# antigen theme agnoster
-# 使用dracula主题
-antigen theme dracula/zsh
+# omz git-flow plugin
+zinit snippet OMZP::git-flow-avh
 
-# Tell Antigen that you're done.
-antigen apply
+# omz tmux plugin
+#zinit snippet OMZP::tmux
 
-# 修复dracula主题导致ohmyzsh的按键绑定配置失效的问题
-if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
-  function zle-line-init() {
-    echoti smkx
-  }
-  function zle-line-finish() {
-    echoti rmkx
-  }
-  zle -N zle-line-init
-  zle -N zle-line-finish
-fi
+# omz dotenv plugin
+# zinit snippet OMZP::dotenv
+
+# omz docker plugin
+zinit for \
+  as"completion" OMZP::docker/_docker
+
+# omz docker-machine plugin
+zinit for \
+  as"completion" OMZP::docker-machine/_docker-machine \
+  OMZP::docker-machine \
+
+# omz docker-compose plugin
+zinit for \
+  as"completion" OMZP::docker-compose/_docker-compose \
+  OMZP::docker-compose
+
+# omz command-not-found plugin
+zinit snippet OMZP::command-not-found
+
+# omz extract plugin
+zinit for \
+  as"completion" OMZP::extract/_extract \
+  OMZP::extract
+
+# omz colored-man-pages plugin
+zinit snippet OMZP::colored-man-pages
+
+# omz man plugin
+zinit snippet OMZP::man
+
+# omz rsync plugin
+zinit snippet OMZP::rsync
+
+# # 
+
+# 延迟加载以下插件
+#   历史搜索插件
+#   语法高亮
+#   命令完成
+#   类似fish的自动提示
+#   类似fish的上下键搜索历史
+zinit wait lucid for \
+  light-mode \
+    zdharma-continuum/history-search-multi-word \
+  light-mode blockf \
+    zsh-users/zsh-completions \
+  light-mode atload"!_zsh_autosuggest_start" \
+    zsh-users/zsh-autosuggestions \
+  light-mode atload'bindkey "$terminfo[kcuu1]" history-substring-search-up; bindkey "$terminfo[kcud1]" history-substring-search-down' \
+    zsh-users/zsh-history-substring-search \
+  light-mode atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
+    zdharma-continuum/fast-syntax-highlighting \
 
 #########################
 # Alias Config
 #########################
-
-alias zshconfig="cot ~/.zshrc"
-alias ohmyzsh="cot ~/.oh-my-zsh"
-alias lsregister="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister"
-
-# 正rsync同步时候的默认权限为777的问题
-alias rsync="rsync --chmod=Du=rwx,Dgo=rx,Fu=rw,Fog=r --no-o --no-g"
-
-# brew alias
-alias bubo='brew update && brew outdated'
-alias bubc='brew upgrade && brew cleanup'
-alias bubu='bubo && bubc'
 
 # docker相关alias
 #alias dps="docker ps -q | xargs docker inspect --format '{{ .Name }} - {{ .NetworkSettings.IPAddress }}'"
@@ -78,42 +113,9 @@ alias dig@google="dig @8.8.8.8"
 alias dig@dnspod="dig @119.29.29.29"
 alias dig@aliyun="dig @223.5.5.5"
 
-#
+# ssh
 alias ssh-nocheck='ssh -o StrictHostKeyChecking=no'
 
+# ports
+alias ports='lsof -Pni | grep LISTEN'
 
-#########################
-# Custom Function Config
-#########################
-
-# belongs to port
-# usage: "port 8000"
-function port() { lsof -i tcp:$1 | grep LISTEN }
-# all open ports
-# usage: "ports"
-function ports() { lsof -Pni | grep LISTEN }
-
-function forward80 {
-    # sudo pfctl -ef /etc/pf-forward80.conf
-    echo -e "\nrdr pass inet proto tcp from any to any port 80 -> 127.0.0.1 port 8080\n"|\
-    sudo pfctl -ef - &&\
-    echo "forward 80 to 8080 enable."
-}
-
-function unforward80() {
-    # sudo pfctl -df /etc/pf-forward80.conf
-    echo -e "\nrdr pass inet proto tcp from any to any port 80 -> 127.0.0.1 port 8080\n"|\
-    sudo pfctl -df - &&\
-    echo "forward 80 to 8080 disable."
-}
-
-function enable_proxy {
-    export {http,https,ftp}_proxy="http://127.0.0.1:1087" \
-        && echo set proxy: $http_proxy
-}
-
-function disable_proxy {
-    unset {http,https,ftp}_proxy \
-        && echo unset {http,https,ftp}_proxy
-}
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
