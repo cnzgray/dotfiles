@@ -6,7 +6,7 @@ echo "clone dotfiles..."
 dir="$HOME/.dotfiles"
 if [ ! -d "$dir" ]; then
     mkdir -p $dir
-    git clone --recursive https://github.com/cnzgray/dotfiles.git $dir
+    git clone --depth 1 --recursive https://github.com/cnzgray/dotfiles.git $dir
 fi
 
 #echo "install antigen..."
