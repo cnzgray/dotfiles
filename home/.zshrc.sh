@@ -34,7 +34,7 @@ zinit snippet OMZP::git
 zinit snippet OMZP::git-flow-avh
 
 # omz tmux plugin
-#zinit snippet OMZP::tmux
+zinit snippet OMZP::tmux
 
 # omz dotenv plugin
 # zinit snippet OMZP::dotenv
