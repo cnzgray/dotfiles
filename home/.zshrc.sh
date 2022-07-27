@@ -46,6 +46,7 @@ zpm load @omz/gitfast
 zpm load @omz/git
 zpm load @omz/git-flow-avh
 # zpm load @omz/tmux
+# export ZSH_TMUX_ITERM2=true
 zpm load @omz/docker
 zpm load @omz/docker-compose
 zpm load @omz/command-not-found
