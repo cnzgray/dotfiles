@@ -28,8 +28,17 @@ zpm load @omz/lib/termsupport
 zpm load @omz/lib/theme-and-appearance
 
 # Load some OMZ theme
-zpm load @omz/theme/robbyrussell
+# zpm load @omz/theme/robbyrussell
 # zpm load @omz/theme/agnoster
+# 使用powerlevel10k主题
+# 该主题不支持zpm方式安装，因此需要手动加载。
+if [[ ! -f ~/.powerlevel10k/powerlevel10k.zsh-theme ]]; then
+  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.powerlevel10k
+fi
+source ~/.powerlevel10k/powerlevel10k.zsh-theme
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
 
 # Load some OMZ plugins
 zpm load @omz/virtualenv
