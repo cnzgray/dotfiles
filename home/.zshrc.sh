@@ -1,94 +1,85 @@
-# 初始化zinit
-ZINIT_HOME="${XDG_DATA_HOME:-${HOME}}/.zinit/zinit.git"
-if [[ ! -f "${ZINIT_HOME}/zinit.zsh" ]]; then
-  git clone https://github.com/zdharma-continuum/zinit.git "${ZINIT_HOME}"
-fi
-source "${ZINIT_HOME}/zinit.zsh"
-
 DEFAULT_USER=$(whoami)
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH"
+export PATH="/usr/local/sbin:$PATH"
 
-# omz libs
-zinit snippet OMZL::clipboard.zsh
-zinit snippet OMZL::completion.zsh
-zinit snippet OMZL::directories.zsh
-zinit snippet OMZL::history.zsh
-zinit snippet OMZL::git.zsh
-zinit snippet OMZL::key-bindings.zsh
-zinit snippet OMZL::termsupport.zsh
-zinit snippet OMZL::theme-and-appearance.zsh
 
-# omz 主题
-# zinit snippet OMZT::robbyrussell
-# zinit snippet OMZT::agnoster
-# dracula主题
-zinit light dracula/zsh
-# zinit for depth=1 light-mode romkatv/powerlevel10k
+# 初始化zpm
+if [[ ! -f ~/.zpm/zpm.zsh ]]; then
+  git clone --recursive https://github.com/zpm-zsh/zpm ~/.zpm
+fi
+source ~/.zpm/zpm.zsh
 
-# omz git plugin
-zinit snippet OMZP::git
+# Pull in OMZ (doesn't actually source anything)
+zpm load @omz
+# Load any OMZ libraries we want or our OMZ plugins require
+zpm load @omz/lib/clipboard
+zpm load @omz/lib/compfix
+zpm load @omz/lib/completion
+zpm load @omz/lib/directories
+zpm load @omz/lib/functions
+zpm load @omz/lib/git
+zpm load @omz/lib/grep
+zpm load @omz/lib/history
+zpm load @omz/lib/key-bindings
+zpm load @omz/lib/misc
+zpm load @omz/lib/spectrum
+zpm load @omz/lib/termsupport
+zpm load @omz/lib/theme-and-appearance
 
-# omz git-flow plugin
-zinit snippet OMZP::git-flow-avh
+# Load some OMZ theme
+zpm load @omz/theme/robbyrussell
+# zpm load @omz/theme/agnoster
 
-# omz tmux plugin
-zinit snippet OMZP::tmux
+# Load some OMZ plugins
+zpm load @omz/virtualenv
+zpm load @omz/gitfast
+zpm load @omz/git
+zpm load @omz/git-flow-avh
+# zpm load @omz/tmux
+zpm load @omz/docker
+zpm load @omz/docker-compose
+zpm load @omz/command-not-found
+zpm load @omz/extract
+zpm load @omz/colored-man-pages
+zpm load @omz/man
+zpm load @omz/rsync
 
-# omz dotenv plugin
-# zinit snippet OMZP::dotenv
+# 添加额外的命令自动完成
+zpm load @gh/zsh-users/zsh-completions
+# 历史搜索插件, Ctrl+R激活
+zpm load @gh/zdharma-continuum/history-search-multi-word
+# 类似fish的自动提示
+zpm load @gh/zsh-users/zsh-autosuggestions
+# 语法高亮
+zpm load @gh/zdharma-continuum/fast-syntax-highlighting
+# 类似fish的上下键搜索历史, 上下方向键激活
+zpm load @gh/zsh-users/zsh-history-substring-search
+bindkey "$terminfo[kcuu1]" history-substring-search-up
+bindkey "$terminfo[kcud1]" history-substring-search-down
 
-# omz docker plugin
-zinit for \
-  as"completion" OMZP::docker/_docker
 
-# omz docker-machine plugin
-zinit for \
-  as"completion" OMZP::docker-machine/_docker-machine \
-  OMZP::docker-machine \
+# # nvm
+# export NVM_LAZY_LOAD=true
+# export NVM_AUTO_USE=true
+# zinit light lukechilds/zsh-nvm
+# alias upgrade_nodejs="nvm install node --reinstall-packages-from=node && nvm alias default node"
 
-# omz docker-compose plugin
-zinit for \
-  as"completion" OMZP::docker-compose/_docker-compose \
-  OMZP::docker-compose
+# # nvs初始化
+# export NVS_HOME="$HOME/.nvs"
+# [ -s "$NVS_HOME/nvs.sh" ] && . "$NVS_HOME/nvs.sh"
+# # nvs auto on
+# # 在切换目录的时候检测nvmrc并自动use
+# autoload -U add-zsh-hook
+# load-nvmrc() {
+#   if [[ -f .nvmrc && -r .nvmrc ]]; then
+#     nvs use auto
+#   fi
+# }
+# add-zsh-hook chpwd load-nvmrc
+# load-nvmrc
+# alias upgrade_nodejs="nvs upgrade latest"
 
-# omz command-not-found plugin
-zinit snippet OMZP::command-not-found
-
-# omz extract plugin
-zinit for \
-  as"completion" OMZP::extract/_extract \
-  OMZP::extract
-
-# omz colored-man-pages plugin
-zinit snippet OMZP::colored-man-pages
-
-# omz man plugin
-zinit snippet OMZP::man
-
-# omz rsync plugin
-zinit snippet OMZP::rsync
-
-# # 
-
-# 延迟加载以下插件
-#   历史搜索插件
-#   语法高亮
-#   命令完成
-#   类似fish的自动提示
-#   类似fish的上下键搜索历史
-zinit wait lucid for \
-  light-mode \
-    zdharma-continuum/history-search-multi-word \
-  light-mode blockf \
-    zsh-users/zsh-completions \
-  light-mode atload"!_zsh_autosuggest_start" \
-    zsh-users/zsh-autosuggestions \
-  light-mode atload'bindkey "$terminfo[kcuu1]" history-substring-search-up; bindkey "$terminfo[kcud1]" history-substring-search-down' \
-    zsh-users/zsh-history-substring-search \
-  light-mode atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
-    zdharma-continuum/fast-syntax-highlighting \
 
 #########################
 # Alias Config
@@ -118,4 +109,4 @@ alias ssh-nocheck='ssh -o StrictHostKeyChecking=no'
 
 # ports
 alias ports='lsof -Pni | grep LISTEN'
-
+function port() { lsof -i tcp:$1 | grep LISTEN }
