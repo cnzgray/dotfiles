@@ -77,7 +77,10 @@ bindkey "$terminfo[kcud1]" history-substring-search-down
 
 # # nvs初始化
 # export NVS_HOME="$HOME/.nvs"
-# [ -s "$NVS_HOME/nvs.sh" ] && . "$NVS_HOME/nvs.sh"
+#if [[ ! -f $NVS_HOME/nvs.sh ]]; then
+#  git clone --depth=1 https://github.com/jasongin/nvs "$NVS_HOME"
+#fi
+#source "$NVS_HOME/nvs.sh"
 # # nvs auto on
 # # 在切换目录的时候检测nvmrc并自动use
 # autoload -U add-zsh-hook
