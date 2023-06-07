@@ -1,7 +1,7 @@
 DEFAULT_USER=$(whoami)
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
-export PATH="/usr/local/sbin:$PATH"
+export PATH="/usr/local/sbin:/usr/sbin:$PATH"
 
 
 # 初始化zpm
