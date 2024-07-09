@@ -9,11 +9,7 @@ if [ ! -d "$dir" ]; then
     git clone --depth 1 --recursive https://github.com/cnzgray/dotfiles.git $dir
 fi
 
-#echo "install antigen..."
-#curl -L git.io/antigen > "$dir/antigen.zsh"
-
 cd "$dir"
-
 sh etc/symlink-dotfiles.sh
 
 if [ `uname` = 'Darwin' ]; then

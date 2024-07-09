@@ -48,3 +48,5 @@ Temporary Items
 ohmyzsh/
 antigen.zsh
 osx/
+*.zwc
+functions/

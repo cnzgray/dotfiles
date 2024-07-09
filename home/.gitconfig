@@ -7,7 +7,7 @@
 	email = cnzgray@qq.com
 
 [commit]
-	template = "$HOME/.dotfiles/git-extras/git-commit-template.txt"
+#	template = "$HOME/.dotfiles/git-extras/git-commit-template.txt"
 	cleanup = strip
 
 [alias]
@@ -52,3 +52,7 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+[init]
+	defaultBranch = main
+[remote "origin"]
+	tagopt = --tags
